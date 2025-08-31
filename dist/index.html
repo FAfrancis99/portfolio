@@ -600,7 +600,12 @@ section {
     <nav class="navbar" id="navbar">
       <div class="nav-container">
         <div class="logo">FF</div>
-        <ul class="nav-links">
+        <div class="mobile-menu-toggle" id="mobileMenuToggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-links" id="navLinks">
           <li><a href="#hero">Home</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#projects">Projects</a></li>
@@ -645,13 +650,19 @@ section {
           <div class="about-text">
             <p>
               Hi! I'm a Computer Science graduate from The Hebrew University of Jerusalem, 
-              passionate about creating software that makes a difference. I have experience 
-              in multiple programming languages and love tackling complex challenges.
+              passionate about creating software that makes a difference. I have a strong 
+              foundation in multiple programming languages and love tackling complex challenges 
+              with elegant solutions.
             </p>
             <p>
               During my Software Engineer internship at Auura Inc, I worked on backend features 
-              and AI-driven components including text embeddings and semantic matching. 
-              I'm eager to learn new technologies and collaborate with talented teams.
+              and AI-driven components including text embeddings and semantic matching. I'm always 
+              eager to learn new technologies and collaborate with talented teams.
+            </p>
+            <p>
+              When I'm not coding, you'll find me following football, listening to music, 
+              or writing poetry. I believe in maintaining a curious and collaborative approach 
+              to both life and work.
             </p>
             
             <div class="skills-grid">
@@ -681,7 +692,7 @@ section {
               </div>
             </div>
             
-            <div style="margin-top: 1rem">
+            <div style="margin-top: 2rem">
               <a href="/assets/FahimCV.pdf" target="_blank" class="btn btn-primary">
                 <i class="fas fa-download"></i>
                 Download Resume
@@ -840,6 +851,27 @@ window.addEventListener('scroll', ()=>{
     if (window.scrollY > 50) navbar.classList.add('scrolled');
     else navbar.classList.remove('scrolled');
 });
+// Mobile menu functionality
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const navLinks = document.getElementById('navLinks');
+mobileMenuToggle.addEventListener('click', ()=>{
+    mobileMenuToggle.classList.toggle('active');
+    navLinks.classList.toggle('active');
+});
+// Close mobile menu when clicking on a link
+document.querySelectorAll('.nav-links a').forEach((link)=>{
+    link.addEventListener('click', ()=>{
+        mobileMenuToggle.classList.remove('active');
+        navLinks.classList.remove('active');
+    });
+});
+// Close mobile menu when clicking outside
+document.addEventListener('click', (e)=>{
+    if (!mobileMenuToggle.contains(e.target) && !navLinks.contains(e.target)) {
+        mobileMenuToggle.classList.remove('active');
+        navLinks.classList.remove('active');
+    }
+});
 // Reveal animation on scroll
 const observerOptions = {
     threshold: 0.1,
@@ -865,8 +897,8 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor)=>{
         });
     });
 });
-// Add parallax effect to hero
-window.addEventListener('scroll', ()=>{
+// Add parallax effect to hero (disabled on mobile for performance)
+if (window.innerWidth > 768) window.addEventListener('scroll', ()=>{
     const scrolled = window.pageYOffset;
     const heroContent = document.querySelector('.hero-content');
     if (heroContent) heroContent.style.transform = `translateY(${scrolled * 0.5}px)`;
