@@ -101,13 +101,14 @@ body {
 .mobile-menu-toggle span {
   width: 25px;
   height: 3px;
-  background: var(--text-color);
+  background: var(--primary-color); /* Blue color for better visibility */
   transition: all 0.3s ease;
   border-radius: 2px;
 }
 
 .mobile-menu-toggle.active span:nth-child(1) {
   transform: rotate(45deg) translate(5px, 5px);
+  background: var(--primary-color); /* Keep blue when active */
 }
 
 .mobile-menu-toggle.active span:nth-child(2) {
@@ -116,6 +117,7 @@ body {
 
 .mobile-menu-toggle.active span:nth-child(3) {
   transform: rotate(-45deg) translate(7px, -6px);
+  background: var(--primary-color); /* Keep blue when active */
 }
 
 .hero-section {
