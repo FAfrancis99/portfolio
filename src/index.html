@@ -1,318 +1,939 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Fahim Francis — Junior Software Developer & ML Engineer based in Jerusalem."
-    />
-    <title>Fahim Francis</title>
-    <link rel="icon" type="image/png" href="./assets/favicon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./styles.scss" />
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fahim Francis — Software Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:          #0d1117;
+      --bg-alt:      #0a0e19;
+      --surface:     #161b22;
+      --surface-2:   #1c2128;
+      --border:      #21262d;
+      --border-2:    #30363d;
+      --text:        #e6edf3;
+      --muted:       #8b949e;
+      --accent:      #58a6ff;
+      --accent-dim:  rgba(88,166,255,.1);
+      --accent-glow: rgba(88,166,255,.3);
+      --green:       #3fb950;
+      --green-dim:   rgba(63,185,80,.12);
+      --purple:      #a371f7;
+      --nav-h:       68px;
+      --max-w:       1000px;
+      --ease:        .25s ease;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(88,166,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(88,166,255,.018) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 2rem; }
 
-    <!-- ── NAV ── -->
-    <header class="nav-header" id="nav-header">
-      <nav class="nav container">
-        <a href="#hero" class="nav__logo">FF<span class="nav__logo-dot">.</span></a>
-        <ul class="nav__links" id="nav-links">
-          <li><a href="#about" class="nav__link">About</a></li>
-          <li><a href="#skills" class="nav__link">Skills</a></li>
-          <li><a href="#experience" class="nav__link">Experience</a></li>
-          <li><a href="#projects" class="nav__link">Projects</a></li>
-          <li><a href="#contact" class="nav__link">Contact</a></li>
-        </ul>
-        <a href="./assets/cv-FF.pdf" class="btn btn--sm btn--outline" download>Resume</a>
-        <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu">
-          <span></span><span></span><span></span>
-        </button>
-      </nav>
-    </header>
+    /* ── SCROLL PROGRESS ── */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 2px; z-index: 300;
+      background: linear-gradient(90deg, var(--accent), var(--purple));
+      width: 0%; transition: width .08s linear; pointer-events: none;
+    }
 
-    <!-- Mobile nav overlay -->
-    <div class="mobile-nav" id="mobile-nav">
-      <a href="#about" class="mobile-nav__link">About</a>
-      <a href="#skills" class="mobile-nav__link">Skills</a>
-      <a href="#experience" class="mobile-nav__link">Experience</a>
-      <a href="#projects" class="mobile-nav__link">Projects</a>
-      <a href="#contact" class="mobile-nav__link">Contact</a>
-      <a href="./assets/cv-FF.pdf" class="btn btn--outline" download>Resume</a>
-    </div>
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    <!-- ── HERO ── -->
-    <section id="hero" class="hero">
-      <div class="container hero__inner">
-        <p class="hero__greeting reveal">Hi, my name is</p>
-        <h1 class="hero__name reveal">Fahim Francis.</h1>
-        <h2 class="hero__tagline reveal">I build software &amp; train models.</h2>
-        <p class="hero__desc reveal">
-          Junior Software Developer and ML Engineer. CS graduate from the
-          Hebrew University of Jerusalem with a passion for backend systems
-          and intelligent applications.
-        </p>
-        <div class="hero__cta reveal">
-          <a href="#projects" class="btn btn--primary">See My Work</a>
-          <a href="#contact" class="btn btn--ghost">Get In Touch</a>
-        </div>
-      </div>
-    </section>
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .75rem 1.5rem; border-radius: 6px;
+      font-family: inherit; font-size: .9rem; font-weight: 500;
+      cursor: pointer; border: none; white-space: nowrap; transition: all var(--ease);
+    }
+    .btn--primary { background: var(--accent); color: #0d1117; }
+    .btn--primary:hover { background: #79b8ff; transform: translateY(-2px); box-shadow: 0 8px 28px var(--accent-glow); }
+    .btn--ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+    .btn--ghost:hover { background: var(--accent-dim); transform: translateY(-2px); }
+    .btn--outline { background: transparent; color: var(--muted); border: 1px solid var(--border-2); }
+    .btn--outline:hover { border-color: var(--accent); color: var(--accent); }
+    .btn--sm { padding: .4rem .9rem; font-size: .8rem; }
 
-    <!-- ── ABOUT ── -->
-    <section id="about" class="section">
-      <div class="container">
-        <h2 class="section__title reveal">
-          <span class="section__num">01.</span> About Me
-        </h2>
-        <div class="about__grid">
-          <div class="about__text reveal">
-            <p>
-              I'm Fahim, a software developer with a strong foundation in
-              computer science from
-              <strong>Hebrew University of Jerusalem (HUJI)</strong>. I'm
-              passionate about building robust backend systems and applying
-              machine learning to solve real-world problems.
-            </p>
-            <p>
-              During my internship at <strong>Auura Inc</strong>, I worked on
-              backend features and AI-powered components including text
-              embeddings and semantic matching — which deepened my interest in
-              scalable systems and data-driven solutions.
-            </p>
-            <p>
-              Outside of work, you'll find me following football, listening to
-              music, or writing poetry. Here are a few technologies I've been
-              working with recently:
-            </p>
-            <ul class="about__techs">
-              <li>Python</li>
-              <li>Java</li>
-              <li>C++</li>
-              <li>SQL</li>
-              <li>Machine Learning</li>
-              <li>Backend Development</li>
-            </ul>
-            <a href="./assets/cv-FF.pdf" class="btn btn--outline" download>
-              Download Resume
+    /* ── NAV ── FF left, links right ── */
+    .nav-header {
+      position: fixed; inset: 0 0 auto 0; height: var(--nav-h); z-index: 100;
+      background: rgba(13,17,23,.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border); transition: box-shadow var(--ease);
+    }
+    .nav-header.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,.5); }
+    .nav { display: flex; align-items: center; height: 100%; gap: 1rem; }
+
+    /* FF on LEFT */
+    .nav__logo {
+      font-size: 1.2rem; font-weight: 700; color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      border: 1px solid var(--accent-dim); padding: .3rem .65rem;
+      border-radius: 6px; margin-right: auto;
+      transition: background var(--ease), box-shadow var(--ease);
+    }
+    .nav__logo:hover { background: var(--accent-dim); box-shadow: 0 0 16px var(--accent-glow); }
+    .nav__logo-dot { color: var(--text); }
+
+    /* links on right */
+    .nav__links { display: flex; gap: .1rem; }
+    .nav__link {
+      font-size: .82rem; color: var(--muted); font-family: 'JetBrains Mono', monospace;
+      padding: .45rem .7rem; border-radius: 5px;
+      transition: color var(--ease), background var(--ease);
+    }
+    .nav__link:hover, .nav__link.active { color: var(--accent); background: var(--accent-dim); }
+
+    /* ── PROJECTS DROPDOWN ── */
+    .nav__item { position: relative; }
+    .nav__dropdown {
+      position: absolute; top: calc(100% + 10px); right: 0;
+      background: var(--surface); border: 1px solid var(--border-2);
+      border-radius: 10px; padding: .5rem;
+      min-width: 240px; z-index: 200;
+      opacity: 0; pointer-events: none;
+      transform: translateY(-8px);
+      transition: opacity .2s ease, transform .2s ease;
+      box-shadow: 0 16px 48px rgba(0,0,0,.5);
+    }
+    .nav__item:hover .nav__dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .nav__dropdown-item {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .65rem .75rem; border-radius: 7px; color: var(--muted);
+      font-size: .82rem; transition: background var(--ease), color var(--ease);
+    }
+    .nav__dropdown-item:hover { background: var(--accent-dim); color: var(--text); }
+    .nav__dropdown-item__icon {
+      width: 28px; height: 28px; border-radius: 6px;
+      background: var(--accent-dim); border: 1px solid rgba(88,166,255,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .75rem; flex-shrink: 0; color: var(--accent);
+    }
+    .nav__dropdown-item__name { font-weight: 500; color: var(--text); font-size: .82rem; margin-bottom: .1rem; }
+    .nav__dropdown-item__sub { font-size: .72rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+    .nav__hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: .5rem;
+    }
+    .nav__hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all var(--ease); }
+    .nav__hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .nav__hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav__hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+    /* ── MOBILE NAV ── */
+    .mobile-nav {
+      display: none; position: fixed; inset: var(--nav-h) 0 0 0;
+      background: rgba(10,14,25,.98); backdrop-filter: blur(16px);
+      z-index: 99; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav__link { font-size: 1.15rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; transition: color var(--ease); }
+    .mobile-nav__link:hover { color: var(--accent); }
+
+    /* ── SOCIAL SIDEBAR ── */
+    .social-sidebar {
+      position: fixed; bottom: 0; left: 2rem; z-index: 50;
+      display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
+    }
+    .social-sidebar a { color: var(--muted); transition: color var(--ease), transform var(--ease); }
+    .social-sidebar a:hover { color: var(--accent); transform: translateY(-3px); }
+    .social-sidebar::after { content: ''; display: block; width: 1px; height: 80px; background: var(--border-2); }
+    @media (max-width: 900px) { .social-sidebar { display: none; } }
+
+    /* ── SECTIONS ── */
+    .section { padding: 6rem 0; }
+    .section--alt { background: var(--bg-alt); }
+    .section__title {
+      font-size: 1.55rem; font-weight: 600; color: var(--text);
+      margin-bottom: 3rem; display: flex; align-items: center; gap: .75rem;
+    }
+    .section__title::after {
+      content: ''; display: block; height: 1px; width: 160px;
+      background: linear-gradient(90deg, var(--border-2), transparent);
+    }
+    .section__title--center { justify-content: center; }
+    .section__title--center::after { display: none; }
+    .section__num { font-family: 'JetBrains Mono', monospace; font-size: .9rem; font-weight: 400; color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero { min-height: 100vh; display: flex; align-items: center; padding-top: var(--nav-h); position: relative; overflow: hidden; }
+    canvas#particles { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+    .hero__inner { padding: 4rem 0; position: relative; z-index: 1; }
+
+    /* floating gradient orbs */
+    .hero__orb {
+      position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0;
+    }
+    .hero__orb--1 {
+      width: 500px; height: 500px; background: rgba(88,166,255,.06);
+      top: 5%; left: 55%; animation: orb-float 11s ease-in-out infinite;
+    }
+    .hero__orb--2 {
+      width: 350px; height: 350px; background: rgba(163,113,247,.05);
+      bottom: 10%; right: 5%; animation: orb-float 14s ease-in-out infinite reverse;
+    }
+    .hero__orb--3 {
+      width: 200px; height: 200px; background: rgba(63,185,80,.04);
+      top: 60%; left: 10%; animation: orb-float 9s ease-in-out infinite 2s;
+    }
+    @keyframes orb-float {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33%      { transform: translate(25px,-30px) scale(1.06); }
+      66%      { transform: translate(-20px,20px) scale(.95); }
+    }
+
+    /* hero text parallax — transition for smooth return */
+    .hero__greeting, .hero__name, .hero__tagline, .hero__desc, .hero__cta {
+      transition: transform .08s ease;
+    }
+    .hero__available {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-family: 'JetBrains Mono', monospace; font-size: .78rem;
+      color: var(--green); background: var(--green-dim);
+      border: 1px solid rgba(63,185,80,.3); padding: .3rem .8rem;
+      border-radius: 20px; margin-bottom: 1.5rem;
+    }
+    .hero__available::before {
+      content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green);
+      animation: pulse-green 2s ease infinite;
+    }
+    @keyframes pulse-green {
+      0%,100% { box-shadow: 0 0 0 0 rgba(63,185,80,.5); }
+      50% { box-shadow: 0 0 0 7px rgba(63,185,80,0); }
+    }
+    .hero__greeting { font-family: 'JetBrains Mono', monospace; font-size: .95rem; color: var(--accent); margin-bottom: 1rem; }
+    .hero__name {
+      font-size: clamp(2.8rem, 7vw, 5.5rem); font-weight: 700;
+      line-height: 1.05; letter-spacing: -.03em; margin-bottom: .5rem;
+      background: linear-gradient(135deg, #e6edf3 20%, var(--accent) 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero__tagline {
+      font-size: clamp(1.3rem, 3.5vw, 2.4rem); font-weight: 600;
+      color: var(--muted); line-height: 1.2; letter-spacing: -.02em;
+      margin-bottom: 1.5rem; min-height: 1.3em;
+    }
+    .hero__cursor { display: inline-block; width: 3px; height: .85em; background: var(--accent); margin-left: 2px; vertical-align: middle; animation: blink .8s step-end infinite; }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+    .hero__desc { max-width: 520px; color: var(--muted); font-size: 1rem; line-height: 1.75; margin-bottom: 2.5rem; }
+    .hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* ── WHAT I BUILD ── */
+    .wib__grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
+    .wib-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.5rem;
+      transition: border-color .2s ease, box-shadow .2s ease;
+      position: relative; overflow: hidden;
+      transform-style: preserve-3d; will-change: transform;
+    }
+    .wib-card::before {
+      content: ''; position: absolute; inset: 0; opacity: 0;
+      background: linear-gradient(135deg, var(--accent-dim), transparent);
+      transition: opacity var(--ease);
+    }
+    .wib-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,.35); }
+    .wib-card:hover::before { opacity: 1; }
+    .wib-card__icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: var(--accent-dim); border: 1px solid rgba(88,166,255,.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; margin-bottom: 1rem;
+    }
+    .wib-card__title { font-size: .95rem; font-weight: 600; color: var(--text); margin-bottom: .5rem; }
+    .wib-card__desc { font-size: .825rem; color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
+    .wib-card__tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .wib-card__tags span {
+      font-family: 'JetBrains Mono', monospace; font-size: .68rem;
+      color: var(--accent); background: var(--accent-dim);
+      padding: .15rem .55rem; border-radius: 4px;
+    }
+
+    /* ── ABOUT ── */
+    .about__grid { display: grid; grid-template-columns: 1fr auto; gap: 4rem; align-items: start; }
+    .about__text p { color: var(--muted); margin-bottom: 1rem; line-height: 1.75; }
+    .about__text strong { color: var(--text); }
+    .about__techs { display: grid; grid-template-columns: repeat(2,1fr); gap: .5rem; margin: 1.5rem 0; }
+    .about__techs li {
+      font-family: 'JetBrains Mono', monospace; font-size: .8rem;
+      color: var(--muted); display: flex; align-items: center; gap: .5rem;
+    }
+    .about__techs li::before { content: '▸'; color: var(--accent); font-size: .65rem; }
+    .about__img-wrap { width: 220px; flex-shrink: 0; position: relative; }
+    .about__img-wrap::before {
+      content: ''; position: absolute; top: 14px; left: 14px; right: -14px; bottom: -14px;
+      border: 2px solid var(--accent); border-radius: 8px; z-index: 0; transition: all var(--ease);
+    }
+    .about__img-wrap:hover::before { top: 8px; left: 8px; right: -8px; bottom: -8px; }
+    .about__img { width: 100%; border-radius: 8px; position: relative; z-index: 1; filter: grayscale(15%); border: 1px solid var(--border); transition: filter var(--ease); }
+    .about__img:hover { filter: grayscale(0%); }
+
+    /* ── LANGUAGES SPOKEN ── */
+    .lang-strip {
+      display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1.75rem; padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .lang-pill {
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .8rem; padding: .35rem .85rem;
+      border-radius: 20px; border: 1px solid var(--border-2);
+      color: var(--muted); background: var(--surface-2);
+    }
+    .lang-pill__flag { font-size: 1rem; }
+    .lang-pill__level { font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: var(--accent); margin-left: .25rem; }
+
+    /* ── SKILLS ── */
+    .skills__grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+    .skill-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.5rem;
+      transition: border-color .2s ease, box-shadow .2s ease;
+      position: relative; overflow: hidden;
+      transform-style: preserve-3d; will-change: transform;
+    }
+    .skill-card::before {
+      content: ''; position: absolute; inset: 0; opacity: 0;
+      background: linear-gradient(135deg, var(--accent-dim), transparent);
+      transition: opacity var(--ease);
+    }
+    .skill-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.3); }
+    .skill-card:hover::before { opacity: 1; }
+    .skill-card__icon { font-size: 1.5rem; margin-bottom: .75rem; }
+    .skill-card__title {
+      font-family: 'JetBrains Mono', monospace; font-size: .72rem;
+      font-weight: 500; text-transform: uppercase; letter-spacing: .12em;
+      color: var(--accent); margin-bottom: 1rem; position: relative;
+    }
+    .skill-card li {
+      font-size: .875rem; color: var(--muted); padding: .35rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color var(--ease), padding-left var(--ease);
+    }
+    .skill-card li:last-child { border-bottom: none; }
+    .skill-card:hover li { color: var(--text); padding-left: .35rem; }
+
+    /* ── EXPERIENCE ── */
+    .exp-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 2rem;
+      transition: border-color .2s ease, box-shadow .2s ease;
+      transform-style: preserve-3d; will-change: transform;
+    }
+    .exp-card:hover { border-color: var(--accent); }
+    .exp-card__header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
+    .exp-card__role { font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: .25rem; }
+    .exp-card__company { font-size: .95rem; color: var(--accent); }
+    .exp-card__date {
+      font-family: 'JetBrains Mono', monospace; font-size: .78rem;
+      color: var(--muted); background: var(--surface-2); border: 1px solid var(--border-2);
+      padding: .25rem .75rem; border-radius: 20px; white-space: nowrap;
+    }
+    .exp-card__bullets { padding-left: 1.25rem; margin-bottom: 1.25rem; }
+    .exp-card__bullets li { font-size: .875rem; color: var(--muted); line-height: 1.7; margin-bottom: .4rem; list-style: disc; }
+    .exp-card__bullets li strong { color: var(--text); }
+    .exp-card__tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .exp-card__tags span {
+      font-family: 'JetBrains Mono', monospace; font-size: .72rem;
+      color: var(--accent); background: var(--accent-dim);
+      padding: .2rem .65rem; border-radius: 4px; border: 1px solid rgba(88,166,255,.2);
+    }
+
+    /* ── EDUCATION ── */
+    .edu-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 2rem;
+      display: flex; gap: 2rem; align-items: center;
+      transition: border-color .2s ease, box-shadow .2s ease; margin-top: 1.5rem;
+      transform-style: preserve-3d; will-change: transform;
+    }
+    .edu-card:hover { border-color: var(--accent); }
+    .edu-card__badge {
+      width: 60px; height: 60px; border-radius: 12px;
+      background: var(--accent-dim); border: 1px solid rgba(88,166,255,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'JetBrains Mono', monospace; font-size: .95rem;
+      font-weight: 700; color: var(--accent); flex-shrink: 0;
+    }
+    .edu-card__body h3 { font-size: 1.05rem; font-weight: 600; color: var(--text); margin-bottom: .2rem; }
+    .edu-card__body p { font-size: .875rem; color: var(--muted); margin-bottom: .9rem; }
+    .edu-card__grades { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .edu-card__grade {
+      font-size: .78rem; color: var(--muted);
+      background: var(--surface-2); border: 1px solid var(--border-2);
+      padding: .2rem .65rem; border-radius: 4px;
+    }
+    .edu-card__grade strong { color: var(--accent); }
+
+    /* ── PROJECTS ── */
+    .projects__grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+    .project-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.75rem;
+      display: flex; flex-direction: column; gap: .75rem;
+      transition: border-color .2s ease, box-shadow .2s ease;
+      position: relative; overflow: hidden;
+      transform-style: preserve-3d; will-change: transform;
+    }
+    .project-card::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 60%, rgba(88,166,255,.05));
+      opacity: 0; transition: opacity var(--ease); pointer-events: none;
+    }
+    .project-card.tilted { border-color: var(--accent); box-shadow: 0 20px 60px rgba(0,0,0,.45), 0 0 0 1px var(--accent-dim); }
+    .project-card.tilted::after { opacity: 1; }
+    .project-card__header { display: flex; justify-content: space-between; align-items: center; }
+    .project-card__folder { width: 32px; height: 32px; color: var(--accent); }
+    .project-card__github { color: var(--muted); transition: color var(--ease), transform var(--ease); }
+    .project-card__github:hover { color: var(--accent); transform: translateY(-2px); }
+    .project-card__title { font-size: .975rem; font-weight: 600; color: var(--text); }
+    .project-card__desc { font-size: .855rem; color: var(--muted); line-height: 1.7; flex-grow: 1; }
+    .project-card__metrics {
+      display: flex; gap: .75rem; flex-wrap: wrap;
+      padding: .6rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .project-card__metric .num { font-family: 'JetBrains Mono', monospace; font-size: .95rem; color: var(--accent); font-weight: 600; }
+    .project-card__metric .lbl { font-size: .7rem; color: var(--muted); display: block; }
+    .project-card__tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .project-card__tags li { font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: var(--muted); }
+
+    /* ── CONTACT ── */
+    .contact { text-align: center; }
+    .contact__sub { max-width: 480px; margin: 0 auto 2rem; color: var(--muted); font-size: 1rem; line-height: 1.75; }
+    .contact__links { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; margin-top: 3rem; }
+    .contact__link { display: flex; align-items: center; gap: .5rem; color: var(--muted); font-size: .9rem; transition: color var(--ease); }
+    .contact__link:hover { color: var(--accent); }
+
+    /* ── FOOTER ── */
+    .footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: .78rem; color: var(--muted); }
+    .footer__name { color: var(--accent); }
+
+    /* ── BACK TO TOP ── */
+    .back-to-top {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 50;
+      width: 40px; height: 40px; border-radius: 8px;
+      background: var(--surface); border: 1px solid var(--border-2);
+      color: var(--muted); font-size: 1.1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: all var(--ease);
+    }
+    .back-to-top.visible { opacity: 1; pointer-events: all; }
+    .back-to-top:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(88,166,255,.2); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .wib__grid { grid-template-columns: 1fr 1fr; }
+      .projects__grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav__links { display: none; }
+      .nav__hamburger { display: flex; }
+      .about__grid { grid-template-columns: 1fr; }
+      .about__img-wrap { width: 180px; margin: 0 auto; }
+      .about__img-wrap::before { display: none; }
+      .skills__grid { grid-template-columns: 1fr; }
+      .edu-card { flex-direction: column; gap: 1rem; }
+    }
+    @media (max-width: 580px) {
+      .projects__grid { grid-template-columns: 1fr; }
+      .wib__grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scroll-progress" id="scroll-progress"></div>
+
+  <!-- fixed social sidebar -->
+  <div class="social-sidebar">
+    <a href="mailto:faheemfrancis99@gmail.com" aria-label="Email">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    </a>
+    <a href="https://linkedin.com/in/fahim-francis-1183b4294" target="_blank" rel="noopener" aria-label="LinkedIn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+    </a>
+    <a href="https://github.com/FAfrancis99" target="_blank" rel="noopener" aria-label="GitHub">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+    </a>
+  </div>
+
+  <!-- NAV — FF LEFT, links + dropdown RIGHT -->
+  <header class="nav-header" id="nav-header">
+    <nav class="nav container">
+      <a href="#hero" class="nav__logo">FF</a>
+
+      <ul class="nav__links">
+        <li><a href="#about"      class="nav__link">about</a></li>
+        <li><a href="#skills"     class="nav__link">skills</a></li>
+        <li><a href="#experience" class="nav__link">experience</a></li>
+
+        <!-- projects with hover dropdown -->
+        <li class="nav__item">
+          <a href="#projects" class="nav__link">projects ▾</a>
+          <div class="nav__dropdown">
+            <a href="#projects" class="nav__dropdown-item">
+              <div class="nav__dropdown-item__icon">🧬</div>
+              <div>
+                <div class="nav__dropdown-item__name">Antibiotic Resistance</div>
+                <div class="nav__dropdown-item__sub">Python · SVM · k-mer · 91% acc</div>
+              </div>
+            </a>
+            <a href="#projects" class="nav__dropdown-item">
+              <div class="nav__dropdown-item__icon">⚽</div>
+              <div>
+                <div class="nav__dropdown-item__name">FIFA Predictor</div>
+                <div class="nav__dropdown-item__sub">Python · Pandas · scikit-learn · 96% acc</div>
+              </div>
+            </a>
+            <a href="#projects" class="nav__dropdown-item">
+              <div class="nav__dropdown-item__icon">🎮</div>
+              <div>
+                <div class="nav__dropdown-item__name">Pepse Game Engine</div>
+                <div class="nav__dropdown-item__sub">Java · OOP · Physics · Procedural</div>
+              </div>
             </a>
           </div>
-          <div class="about__img-wrap reveal">
-            <img
-              src="./assets/profile.jpg"
-              alt="Fahim Francis"
-              class="about__img"
-            />
+        </li>
+
+        <li><a href="#contact" class="nav__link">contact</a></li>
+      </ul>
+
+      <a href="./assets/FahimFRCV.pdf" class="btn btn--sm btn--outline" download>Resume</a>
+      <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="#about"      class="mobile-nav__link">about</a>
+    <a href="#skills"     class="mobile-nav__link">skills</a>
+    <a href="#experience" class="mobile-nav__link">experience</a>
+    <a href="#projects"   class="mobile-nav__link">projects</a>
+    <a href="#contact"    class="mobile-nav__link">contact</a>
+    <a href="./assets/FahimFRCV.pdf" class="btn btn--outline" download>Resume</a>
+  </div>
+
+  <!-- ── HERO ── -->
+  <section id="hero" class="hero">
+    <canvas id="particles"></canvas>
+    <div class="hero__orb hero__orb--1"></div>
+    <div class="hero__orb hero__orb--2"></div>
+    <div class="hero__orb hero__orb--3"></div>
+    <div class="container hero__inner">
+      <div class="hero__available reveal">Open to opportunities</div>
+      <p class="hero__greeting reveal">Hi, my name is</p>
+      <h1 class="hero__name reveal">Fahim Francis.</h1>
+      <h2 class="hero__tagline reveal">
+        <span id="typewriter"></span><span class="hero__cursor"></span>
+      </h2>
+      <p class="hero__desc reveal">
+        Software engineer with a BSc in Computer Science from HUJI. I build
+        scalable backends, design clean APIs, and apply machine learning where
+        it genuinely adds value. I care about writing code that's correct,
+        readable, and built to last.
+      </p>
+      <div class="hero__cta reveal">
+        <a href="#projects" class="btn btn--primary">See My Work</a>
+        <a href="#contact"  class="btn btn--ghost">Get In Touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WHAT I BUILD ── -->
+  <section class="section section--alt">
+    <div class="container">
+      <h2 class="section__title reveal">
+        <span class="section__num">→</span> What I Build
+      </h2>
+      <div class="wib__grid">
+        <div class="wib-card reveal">
+          <div class="wib-card__icon">⚙️</div>
+          <h3 class="wib-card__title">Backend Systems</h3>
+          <p class="wib-card__desc">Production-grade APIs, data pipelines, and services built for correctness and scale. PostgreSQL, testing, and clean architecture.</p>
+          <div class="wib-card__tags">
+            <span>FastAPI</span><span>PostgreSQL</span><span>REST APIs</span><span>pytest</span>
+          </div>
+        </div>
+        <div class="wib-card reveal">
+          <div class="wib-card__icon">🤖</div>
+          <h3 class="wib-card__title">ML &amp; AI Systems</h3>
+          <p class="wib-card__desc">From classification pipelines to semantic search with Transformers. Models that ship to production, not just notebooks.</p>
+          <div class="wib-card__tags">
+            <span>Transformers</span><span>scikit-learn</span><span>NLP</span><span>Bi-Encoder</span>
+          </div>
+        </div>
+        <div class="wib-card reveal">
+          <div class="wib-card__icon">🌐</div>
+          <h3 class="wib-card__title">Full-Stack Features</h3>
+          <p class="wib-card__desc">End-to-end ownership from database to UI. Dockerised environments, React frontends, and everything wired together.</p>
+          <div class="wib-card__tags">
+            <span>React</span><span>Next.js</span><span>Docker</span><span>TypeScript</span>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- ── SKILLS ── -->
-    <section id="skills" class="section section--alt">
-      <div class="container">
-        <h2 class="section__title reveal">
-          <span class="section__num">02.</span> Skills
-        </h2>
-        <div class="skills__grid reveal">
-          <div class="skill-card">
-            <h3 class="skill-card__title">Languages</h3>
-            <ul>
-              <li>Python</li>
-              <li>Java</li>
-              <li>C++</li>
-              <li>SQL</li>
-              <li>JavaScript</li>
-              <li>Bash</li>
-            </ul>
-          </div>
-          <div class="skill-card">
-            <h3 class="skill-card__title">ML &amp; Data</h3>
-            <ul>
-              <li>scikit-learn</li>
-              <li>NumPy / Pandas</li>
-              <li>Matplotlib</li>
-              <li>Feature Engineering</li>
-              <li>Model Evaluation</li>
-              <li>Text Embeddings</li>
-            </ul>
-          </div>
-          <div class="skill-card">
-            <h3 class="skill-card__title">Backend &amp; Tools</h3>
-            <ul>
-              <li>REST APIs</li>
-              <li>Git &amp; GitHub</li>
-              <li>Linux / Terminal</li>
-              <li>PostgreSQL</li>
-              <li>OOP Design</li>
-              <li>Data Structures</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── EXPERIENCE ── -->
-    <section id="experience" class="section">
-      <div class="container">
-        <h2 class="section__title reveal">
-          <span class="section__num">03.</span> Experience
-        </h2>
-        <div class="timeline">
-          <div class="timeline__item reveal">
-            <div class="timeline__content">
-              <span class="timeline__date">2024</span>
-              <h3 class="timeline__role">Software Engineer Intern</h3>
-              <p class="timeline__company">Auura Inc</p>
-              <p class="timeline__desc">
-                Worked on backend development and AI-powered features including
-                text embeddings and semantic matching. Contributed to building
-                scalable application components in a fast-paced startup
-                environment.
-              </p>
-              <div class="timeline__tags">
-                <span>Python</span><span>Backend</span><span>NLP</span><span>AI</span>
-              </div>
-            </div>
-          </div>
-          <div class="timeline__item reveal">
-            <div class="timeline__content">
-              <span class="timeline__date">2020 – 2024</span>
-              <h3 class="timeline__role">BSc Computer Science</h3>
-              <p class="timeline__company">
-                Hebrew University of Jerusalem (HUJI)
-              </p>
-              <p class="timeline__desc">
-                Studied core CS fundamentals including algorithms, data
-                structures, operating systems, machine learning, and software
-                engineering. Built multiple projects spanning game development,
-                data science, and bioinformatics.
-              </p>
-              <div class="timeline__tags">
-                <span>Algorithms</span><span>ML</span><span>OOP</span><span>OS</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── PROJECTS ── -->
-    <section id="projects" class="section section--alt">
-      <div class="container">
-        <h2 class="section__title reveal">
-          <span class="section__num">04.</span> Projects
-        </h2>
-        <div class="projects__grid">
-
-          <article class="project-card reveal">
-            <div class="project-card__header">
-              <svg class="project-card__folder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-              </svg>
-              <a href="https://github.com/FAfrancis99/CBIO-Hackathon" target="_blank" rel="noopener noreferrer" class="project-card__github" aria-label="GitHub repository">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-              </a>
-            </div>
-            <h3 class="project-card__title">Antibiotic Resistance Prediction</h3>
-            <p class="project-card__desc">
-              ML pipeline for predicting antibiotic resistance from raw genomic
-              sequences using k-mer analysis on MEGARes data. Focused on
-              Beta-lactamase and Aminoglycoside resistance prediction with
-              advanced feature engineering and SMOTE for class imbalance.
-            </p>
-            <ul class="project-card__tags">
-              <li>Python</li><li>scikit-learn</li><li>Bioinformatics</li><li>SMOTE</li>
-            </ul>
-          </article>
-
-          <article class="project-card reveal">
-            <div class="project-card__header">
-              <svg class="project-card__folder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-              </svg>
-              <a href="https://github.com/FAfrancis99/fifa-worldcup" target="_blank" rel="noopener noreferrer" class="project-card__github" aria-label="GitHub repository">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-              </a>
-            </div>
-            <h3 class="project-card__title">FIFA World Cup Predictor</h3>
-            <p class="project-card__desc">
-              Data science project predicting World Cup match outcomes using
-              historical data and team statistics. Applied classification
-              algorithms with statistical analysis and addressed class imbalance
-              challenges using ensemble methods.
-            </p>
-            <ul class="project-card__tags">
-              <li>Python</li><li>Pandas</li><li>scikit-learn</li><li>Data Science</li>
-            </ul>
-          </article>
-
-          <article class="project-card reveal">
-            <div class="project-card__header">
-              <svg class="project-card__folder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-              </svg>
-              <a href="https://github.com/FAfrancis99/pepsi" target="_blank" rel="noopener noreferrer" class="project-card__github" aria-label="GitHub repository">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-              </a>
-            </div>
-            <h3 class="project-card__title">Pepse Game Engine</h3>
-            <p class="project-card__desc">
-              A 2D side-scrolling game engine built in Java from scratch.
-              Features procedural terrain generation, physics simulation,
-              dynamic day/night cycles, lighting systems, and an energy
-              management system — all built with clean OOP design patterns.
-            </p>
-            <ul class="project-card__tags">
-              <li>Java</li><li>OOP</li><li>Game Dev</li><li>Physics</li>
-            </ul>
-          </article>
+  <!-- ── ABOUT ── -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2 class="section__title reveal">
+        <span class="section__num">01.</span> About Me
+      </h2>
+      <div class="about__grid">
+        <div class="about__text reveal">
+          <p>I'm Fahim — a software engineer with a strong foundation in computer science from <strong>Hebrew University of Jerusalem (HUJI)</strong>. I'm drawn to problems that need both engineering rigour and creative thinking, whether that's a clean API, an optimised data pipeline, or a model that actually ships.</p>
+          <p>At <strong>Auura Inc</strong> I built production backend services in <strong>Python (FastAPI)</strong>, developed semantic search models with Transformers, and owned the Dockerised deployment of the full stack. I work comfortably across backend, ML, and frontend — wherever the team needs me.</p>
+          <p>Things I've been shipping with recently:</p>
+          <ul class="about__techs">
+            <li>Python / FastAPI</li><li>PostgreSQL / SQL</li>
+            <li>Docker / Linux</li><li>Java / C++</li>
+            <li>Transformers / ML</li><li>React / TypeScript</li>
+          </ul>
+          <a href="./assets/FahimFRCV.pdf" class="btn btn--outline" download>Download Resume</a>
 
         </div>
+        <div class="about__img-wrap reveal">
+          <img src="./assets/PHOTO-2025-03-07-11-10-51.png" alt="Fahim Francis" class="about__img" />
+        </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- ── CONTACT ── -->
-    <section id="contact" class="section">
-      <div class="container contact">
-        <h2 class="section__title section__title--center reveal">
-          <span class="section__num">05.</span> Get In Touch
-        </h2>
-        <p class="contact__sub reveal">
-          I'm currently open to new opportunities. Whether you have a question,
-          a project idea, or just want to say hi — my inbox is always open.
-        </p>
-        <a href="mailto:faheemfrancis99@gmail.com" class="btn btn--primary reveal">
-          Say Hello
+  <!-- ── SKILLS ── -->
+  <section id="skills" class="section section--alt">
+    <div class="container">
+      <h2 class="section__title reveal">
+        <span class="section__num">02.</span> Skills
+      </h2>
+      <div class="skills__grid">
+        <div class="skill-card reveal">
+          <div class="skill-card__icon">⌨️</div>
+          <h3 class="skill-card__title">Languages</h3>
+          <ul>
+            <li>Python</li><li>Java</li><li>C / C++</li>
+            <li>JavaScript / TypeScript</li><li>SQL</li><li>HTML / CSS</li>
+          </ul>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-card__icon">⚙️</div>
+          <h3 class="skill-card__title">Frameworks &amp; Tools</h3>
+          <ul>
+            <li>FastAPI</li><li>React / Next.js</li><li>Docker / Compose</li>
+            <li>PostgreSQL / MySQL</li><li>Git &amp; GitHub</li><li>Linux / Bash</li>
+          </ul>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-card__icon">🤖</div>
+          <h3 class="skill-card__title">ML &amp; AI</h3>
+          <ul>
+            <li>scikit-learn</li><li>Transformers (HuggingFace)</li>
+            <li>Cross / Bi-Encoder</li><li>NumPy / Pandas</li>
+            <li>Feature Engineering</li><li>pytest + mock</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── EXPERIENCE + EDUCATION ── -->
+  <section id="experience" class="section">
+    <div class="container">
+      <h2 class="section__title reveal">
+        <span class="section__num">03.</span> Experience
+      </h2>
+      <div class="exp-card reveal">
+        <div class="exp-card__header">
+          <div>
+            <p class="exp-card__role">Software Engineer Intern</p>
+            <p class="exp-card__company">Auura Inc</p>
+          </div>
+        </div>
+        <ul class="exp-card__bullets">
+          <li>Built and optimised backend services in <strong>Python (FastAPI)</strong> and <strong>PostgreSQL</strong>, including data-processing and API layers.</li>
+          <li>Developed semantic matching models using <strong>Transformers, Cross-Encoder, and Bi-Encoder</strong> for text-similarity scoring.</li>
+          <li>Designed REST APIs with <strong>Pydantic validation</strong> and unit testing (pytest + mock).</li>
+          <li>Integrated backend modules with a <strong>React / Next.js (TypeScript)</strong> frontend and generated dynamic email content.</li>
+          <li>Dockerised full-stack environment (Backend + Frontend + PostgreSQL) via <strong>Docker Compose</strong>.</li>
+          <li>Collaborated in agile workflow with code reviews, Git branching strategies, and CI practices.</li>
+        </ul>
+        <div class="exp-card__tags">
+          <span>Python</span><span>FastAPI</span><span>PostgreSQL</span>
+          <span>Transformers</span><span>Docker</span><span>React</span>
+          <span>Next.js</span><span>pytest</span><span>Agile</span>
+        </div>
+      </div>
+
+      <div class="edu-card reveal">
+        <div class="edu-card__badge">BSc</div>
+        <div class="edu-card__body">
+          <h3>Computer Science</h3>
+          <p>Hebrew University of Jerusalem (HUJI)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROJECTS ── -->
+  <section id="projects" class="section section--alt">
+    <div class="container">
+      <h2 class="section__title reveal">
+        <span class="section__num">04.</span> Projects
+      </h2>
+      <div class="projects__grid">
+
+        <article class="project-card reveal">
+          <div class="project-card__header">
+            <svg class="project-card__folder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <a href="https://github.com/FAfrancis99/CBIO-Hackathon" target="_blank" rel="noopener" class="project-card__github">
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+          <h3 class="project-card__title">Antibiotic Resistance Prediction</h3>
+          <p class="project-card__desc">Classification system identifying antibiotic resistance from raw DNA sequences using k-mer analysis on MEGARes data. SVM, Random Forest, and Logistic Regression with SMOTE balancing.</p>
+          <div class="project-card__metrics">
+            <div class="project-card__metric"><span class="num">91%</span><span class="lbl">accuracy</span></div>
+            <div class="project-card__metric"><span class="num">9,000+</span><span class="lbl">samples</span></div>
+            <div class="project-card__metric"><span class="num">+30%</span><span class="lbl">robustness</span></div>
+          </div>
+          <ul class="project-card__tags"><li>Python</li><li>SVM</li><li>Random Forest</li><li>k-mer</li></ul>
+        </article>
+
+        <article class="project-card reveal">
+          <div class="project-card__header">
+            <svg class="project-card__folder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <a href="https://github.com/FAfrancis99/fifa-worldcup" target="_blank" rel="noopener" class="project-card__github">
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+          <h3 class="project-card__title">FIFA World Cup Predictor</h3>
+          <p class="project-card__desc">Data-driven prediction pipeline using historical match data and team performance metrics. Applied clustering and ranking techniques, outperforming all baseline statistical models.</p>
+          <div class="project-card__metrics">
+            <div class="project-card__metric"><span class="num">96%</span><span class="lbl">accuracy</span></div>
+          </div>
+          <ul class="project-card__tags"><li>Python</li><li>Pandas</li><li>scikit-learn</li><li>Data Analysis</li></ul>
+        </article>
+
+        <article class="project-card reveal">
+          <div class="project-card__header">
+            <svg class="project-card__folder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <a href="https://github.com/FAfrancis99/pepsi" target="_blank" rel="noopener" class="project-card__github">
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+          <h3 class="project-card__title">Pepse Game Engine</h3>
+          <p class="project-card__desc">2D side-scrolling game engine built in Java from scratch. Procedural terrain generation, physics simulation, dynamic day/night cycles and energy management — clean OOP throughout.</p>
+          <ul class="project-card__tags"><li>Java</li><li>OOP</li><li>Game Dev</li><li>Physics</li></ul>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section id="contact" class="section">
+    <div class="container contact">
+      <h2 class="section__title section__title--center reveal">
+        <span class="section__num">05.</span> Get In Touch
+      </h2>
+      <p class="contact__sub reveal">
+        I'm actively looking for my next full-time software engineering role. If you have an opening, a project idea, or just want to talk tech — I'd love to hear from you.
+      </p>
+      <a href="mailto:faheemfrancis99@gmail.com" class="btn btn--primary reveal">Say Hello</a>
+      <div class="contact__links reveal">
+        <a href="mailto:faheemfrancis99@gmail.com" class="contact__link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          faheemfrancis99@gmail.com
         </a>
-        <div class="contact__links reveal">
-          <a href="mailto:faheemfrancis99@gmail.com" class="contact__link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            faheemfrancis99@gmail.com
-          </a>
-          <a href="https://linkedin.com/in/fahim-francis-1183b4294" target="_blank" rel="noopener noreferrer" class="contact__link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-            LinkedIn
-          </a>
-          <a href="https://github.com/FAfrancis99" target="_blank" rel="noopener noreferrer" class="contact__link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-            GitHub
-          </a>
-        </div>
+        <a href="https://linkedin.com/in/fahim-francis-1183b4294" target="_blank" rel="noopener" class="contact__link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+        <a href="https://github.com/FAfrancis99" target="_blank" rel="noopener" class="contact__link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- ── FOOTER ── -->
-    <footer class="footer">
-      <p>Designed &amp; Built by <span class="footer__name">Fahim Francis</span></p>
-    </footer>
+  <footer class="footer">
+    <p>Designed &amp; Built by <span class="footer__name">Fahim Francis</span></p>
+  </footer>
 
-    <script type="module" src="./index.js"></script>
-  </body>
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">↑</button>
+
+  <script>
+    // ── PARTICLES ──
+    (function() {
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+      let W, H, dots = [];
+      function resize() {
+        W = canvas.width  = canvas.offsetWidth;
+        H = canvas.height = canvas.offsetHeight;
+      }
+      function Dot() {
+        this.x  = Math.random() * W;
+        this.y  = Math.random() * H;
+        this.r  = Math.random() * 1.5 + 0.5;
+        this.vx = (Math.random() - .5) * .35;
+        this.vy = (Math.random() - .5) * .35;
+        this.a  = Math.random() * .4 + .1;
+      }
+      function init() { dots = []; for (let i = 0; i < 55; i++) dots.push(new Dot()); }
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        dots.forEach(d => {
+          d.x += d.vx; d.y += d.vy;
+          if (d.x < 0 || d.x > W) d.vx *= -1;
+          if (d.y < 0 || d.y > H) d.vy *= -1;
+          ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(88,166,255,${d.a})`; ctx.fill();
+        });
+        // draw lines between close dots
+        for (let i = 0; i < dots.length; i++) {
+          for (let j = i + 1; j < dots.length; j++) {
+            const dx = dots[i].x - dots[j].x, dy = dots[i].y - dots[j].y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 110) {
+              ctx.beginPath();
+              ctx.moveTo(dots[i].x, dots[i].y); ctx.lineTo(dots[j].x, dots[j].y);
+              ctx.strokeStyle = `rgba(88,166,255,${(1 - dist/110) * .12})`;
+              ctx.lineWidth = .8; ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+      resize(); init(); draw();
+      window.addEventListener('resize', () => { resize(); init(); });
+    })();
+
+    // ── TYPEWRITER ──
+    const roles = ['Software Engineer.', 'Backend Developer.', 'Problem Solver.', 'ML Engineer.'];
+    let rIdx = 0, cIdx = 0, deleting = false;
+    const tw = document.getElementById('typewriter');
+    function type() {
+      const cur = roles[rIdx];
+      tw.textContent = deleting ? cur.substring(0, cIdx--) : cur.substring(0, ++cIdx);
+      if (!deleting && cIdx === cur.length) { deleting = true; setTimeout(type, 2200); return; }
+      if (deleting && cIdx < 0) { deleting = false; rIdx = (rIdx + 1) % roles.length; setTimeout(type, 400); return; }
+      setTimeout(type, deleting ? 45 : 95);
+    }
+    setTimeout(type, 900);
+
+    // ── MOBILE MENU ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileNav.classList.toggle('open');
+      document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+    });
+    mobileNav.querySelectorAll('a').forEach(l => l.addEventListener('click', () => {
+      hamburger.classList.remove('open'); mobileNav.classList.remove('open'); document.body.style.overflow = '';
+    }));
+
+    // ── SCROLL ──
+    const scrollBar = document.getElementById('scroll-progress');
+    const backBtn   = document.getElementById('back-to-top');
+    const navHeader = document.getElementById('nav-header');
+    window.addEventListener('scroll', () => {
+      const st = document.documentElement.scrollTop;
+      const h  = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      scrollBar.style.width = (st / h * 100) + '%';
+      backBtn.classList.toggle('visible', st > 500);
+      navHeader.classList.toggle('scrolled', st > 40);
+    });
+    backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // ── REVEAL ──
+    const revObs = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } }),
+      { threshold: 0.08, rootMargin: '0px 0px -50px 0px' }
+    );
+    document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+    // ── 3D TILT — all cards ──
+    function addTilt(selector, deg, lift) {
+      document.querySelectorAll(selector).forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const r = card.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width  - .5;
+          const y = (e.clientY - r.top)  / r.height - .5;
+          card.style.transform = `perspective(700px) rotateY(${x*deg}deg) rotateX(${-y*deg}deg) translateY(${-lift}px) scale(1.01)`;
+          card.classList.add('tilted');
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+          card.classList.remove('tilted');
+        });
+      });
+    }
+    addTilt('.project-card', 10, 7);
+    addTilt('.skill-card',   8,  5);
+    addTilt('.wib-card',     8,  5);
+    addTilt('.exp-card',     4,  3);
+    addTilt('.edu-card',     4,  3);
+
+    // ── HERO MOUSE PARALLAX ──
+    const heroEl   = document.querySelector('.hero');
+    const layers   = [
+      { el: document.querySelector('.hero__available'), sx: .012, sy: .008 },
+      { el: document.querySelector('.hero__greeting'),  sx: .018, sy: .012 },
+      { el: document.querySelector('.hero__name'),      sx: .028, sy: .018 },
+      { el: document.querySelector('.hero__tagline'),   sx: .022, sy: .014 },
+      { el: document.querySelector('.hero__desc'),      sx: .014, sy: .009 },
+      { el: document.querySelector('.hero__cta'),       sx: .010, sy: .007 },
+    ];
+    let heroRect = heroEl.getBoundingClientRect();
+    window.addEventListener('resize', () => { heroRect = heroEl.getBoundingClientRect(); });
+    heroEl.addEventListener('mousemove', e => {
+      const cx = heroRect.left + heroRect.width  / 2;
+      const cy = heroRect.top  + heroRect.height / 2;
+      const dx = e.clientX - cx, dy = e.clientY - cy;
+      layers.forEach(({ el, sx, sy }) => {
+        if (el) el.style.transform = `translate(${dx*sx}px, ${dy*sy}px)`;
+      });
+    });
+    heroEl.addEventListener('mouseleave', () => {
+      layers.forEach(({ el }) => { if (el) el.style.transform = ''; });
+    });
+
+    // ── ACTIVE NAV ──
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav__link');
+    const navObs = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const a = document.querySelector(`.nav__link[href="#${e.target.id}"]`);
+          if (a) a.classList.add('active');
+        }
+      }),
+      { rootMargin: '-40% 0px -55% 0px' }
+    );
+    sections.forEach(s => navObs.observe(s));
+  </script>
+</body>
 </html>
