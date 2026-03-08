@@ -1,950 +1,318 @@
-
 <!DOCTYPE html>
-<html lang="en" class="sr">
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" type="image/png" href="assets/favicon.png" />
-
-    <title>Fahim Francis | Software Developer & ML Engineer</title>
-    <meta name="keywords" content="Fahim Francis, Software Developer, Machine Learning, Python, Java, C++, Full Stack Developer" />
-    <meta name="description" content="Fahim Francis - Passionate Software Developer specializing in ML, backend development, and innovative solutions. CS graduate from HUJI with expertise in Python, Java, C++." />
-
-    <!-- Modern Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="styles.scss" />
-    <script defer src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-    
-    <!-- Advanced Styling -->
-    <style>
-      :root {
-        --primary: #6366f1;
-        --primary-dark: #4f46e5;
-        --secondary: #06b6d4;
-        --accent: #f59e0b;
-        --text-primary: #1f2937;
-        --text-secondary: #6b7280;
-        --text-light: #9ca3af;
-        --bg-primary: #ffffff;
-        --bg-secondary: #f9fafb;
-        --bg-dark: #111827;
-        --surface: #ffffff;
-        --surface-elevated: rgba(255, 255, 255, 0.9);
-        --border: rgba(209, 213, 219, 0.3);
-        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        --gradient-accent: linear-gradient(135deg, var(--accent) 0%, #ef4444 100%);
-        --glass: rgba(255, 255, 255, 0.25);
-        --glass-border: rgba(255, 255, 255, 0.18);
-      }
-      
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      
-      html {
-        scroll-behavior: smooth;
-      }
-      
-      body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        line-height: 1.6;
-        color: var(--text-primary);
-        background: var(--bg-primary);
-        overflow-x: hidden;
-      }
-      
-      /* Animated Background */
-      body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: 
-          radial-gradient(600px circle at 50% 200px, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-          radial-gradient(400px circle at 80% 300px, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
-          radial-gradient(300px circle at 20% 500px, rgba(245, 158, 11, 0.06) 0%, transparent 50%);
-        z-index: -2;
-        animation: float 20s ease-in-out infinite;
-      }
-      
-      @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
-        33% { transform: translateY(-20px) rotate(1deg); }
-        66% { transform: translateY(10px) rotate(-1deg); }
-      }
-      
-      /* Navigation */
-      .navbar {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        padding: 1rem 2rem;
-        background: var(--glass);
-        backdrop-filter: blur(20px);
-        border-bottom: 1px solid var(--glass-border);
-        z-index: 1000;
-        transition: all 0.3s ease;
-      }
-      
-      .navbar.scrolled {
-        background: var(--surface-elevated);
-        backdrop-filter: blur(20px);
-        box-shadow: var(--shadow-lg);
-      }
-      
-      .nav-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-      
-      .logo {
-        font-weight: 800;
-        font-size: 1.5rem;
-        background: var(--gradient-primary);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      
-      .nav-links {
-        display: flex;
-        gap: 2rem;
-        list-style: none;
-      }
-      
-      .nav-links a {
-        text-decoration: none;
-        color: var(--text-secondary);
-        font-weight: 500;
-        transition: all 0.3s ease;
-        position: relative;
-      }
-      
-      .nav-links a:hover {
-        color: var(--primary);
-      }
-      
-      .nav-links a::after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: -5px;
-        left: 50%;
-        background: var(--gradient-primary);
-        transition: all 0.3s ease;
-        transform: translateX(-50%);
-      }
-      
-      .nav-links a:hover::after {
-        width: 100%;
-      }
-      
-      /* Hero Section */
-      .hero-section {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        overflow: hidden;
-      }
-      
-      .hero-content {
-        text-align: center;
-        max-width: 800px;
-        padding: 2rem;
-        position: relative;
-        z-index: 2;
-      }
-      
-      .hero-greeting {
-        font-size: 1.2rem;
-        color: var(--text-secondary);
-        margin-bottom: 0.5rem;
-        opacity: 0;
-        animation: fadeInUp 1s ease 0.2s forwards;
-      }
-      
-      .hero-title {
-        font-size: clamp(3rem, 8vw, 6rem);
-        font-weight: 900;
-        line-height: 1.1;
-        margin-bottom: 1rem;
-        opacity: 0;
-        animation: fadeInUp 1s ease 0.4s forwards;
-      }
-      
-      .hero-name {
-        background: var(--gradient-primary);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      
-      .hero-subtitle {
-        font-size: clamp(1.5rem, 4vw, 2.5rem);
-        font-weight: 300;
-        color: var(--text-secondary);
-        margin-bottom: 2rem;
-        opacity: 0;
-        animation: fadeInUp 1s ease 0.6s forwards;
-      }
-      
-      .hero-description {
-        font-size: 1.2rem;
-        color: var(--text-secondary);
-        margin-bottom: 3rem;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-        opacity: 0;
-        animation: fadeInUp 1s ease 0.8s forwards;
-      }
-      
-      .hero-cta {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-        opacity: 0;
-        animation: fadeInUp 1s ease 1s forwards;
-      }
-      
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      
-      /* Buttons */
-      .btn {
-        padding: 1rem 2rem;
-        border: none;
-        border-radius: 50px;
-        font-weight: 600;
-        font-size: 1rem;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-      }
-      
-      .btn-primary {
-        background: var(--gradient-primary);
-        color: white;
-        box-shadow: var(--shadow-lg);
-      }
-      
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-xl);
-      }
-      
-      .btn-secondary {
-        background: var(--surface);
-        color: var(--text-primary);
-        border: 2px solid var(--border);
-        box-shadow: var(--shadow-md);
-      }
-      
-      .btn-secondary:hover {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-        transform: translateY(-2px);
-      }
-      
-      /* Glass Cards */
-      .glass-card {
-        background: var(--glass);
-        backdrop-filter: blur(20px);
-        border: 1px solid var(--glass-border);
-        border-radius: 20px;
-        padding: 2rem;
-        box-shadow: var(--shadow-xl);
-        transition: all 0.3s ease;
-      }
-      
-      .glass-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-      }
-      
-      /* Sections */
-      section {
-        padding: 5rem 0;
-      }
-      
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 2rem;
-      }
-      
-      .section-title {
-        font-size: clamp(2rem, 5vw, 3rem);
-        font-weight: 800;
-        text-align: center;
-        margin-bottom: 3rem;
-        position: relative;
-      }
-      
-      .section-title::after {
-        content: '';
-        position: absolute;
-        width: 60px;
-        height: 4px;
-        background: var(--gradient-primary);
-        bottom: -10px;
-        left: 50%;
-        transform: translateX(-50%);
-        border-radius: 2px;
-      }
-      
-      /* About Section */
-      .about-wrapper {
-        display: grid;
-        grid-template-columns: 1fr 2fr;
-        gap: 4rem;
-        align-items: center;
-      }
-      
-      .about-image {
-        position: relative;
-      }
-      
-      .about-image img {
-        width: 100%;
-        border-radius: 20px;
-        box-shadow: var(--shadow-xl);
-        transition: transform 0.3s ease;
-      }
-      
-      .about-image:hover img {
-        transform: scale(1.02);
-      }
-      
-      .about-image::before {
-        content: '';
-        position: absolute;
-        top: -20px;
-        left: -20px;
-        right: 20px;
-        bottom: 20px;
-        background: var(--gradient-primary);
-        border-radius: 20px;
-        z-index: -1;
-        opacity: 0.3;
-      }
-      
-      .about-text {
-        background: var(--surface);
-        padding: 3rem;
-        border-radius: 20px;
-        box-shadow: var(--shadow-lg);
-        border: 1px solid var(--border);
-      }
-      
-      .about-text p {
-        font-size: 1.1rem;
-        line-height: 1.8;
-        margin-bottom: 1.5rem;
-        color: var(--text-secondary);
-      }
-      
-      /* Skills */
-      .skills-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 1rem;
-        margin: 2rem 0;
-      }
-      
-      .skill-item {
-        background: var(--surface);
-        padding: 1.5rem 1rem;
-        border-radius: 15px;
-        text-align: center;
-        border: 1px solid var(--border);
-        transition: all 0.3s ease;
-      }
-      
-      .skill-item:hover {
-        transform: translateY(-5px);
-        background: var(--primary);
-        color: white;
-      }
-      
-      .skill-item i {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
-        display: block;
-      }
-      
-      /* Projects */
-      .projects-grid {
-        display: grid;
-        gap: 3rem;
-      }
-      
-      .project-card {
-        display: grid;
-        grid-template-columns: 1fr 1.5fr;
-        gap: 2rem;
-        align-items: center;
-        background: var(--surface);
-        border-radius: 20px;
-        padding: 2rem;
-        box-shadow: var(--shadow-lg);
-        border: 1px solid var(--border);
-        transition: all 0.3s ease;
-      }
-      
-      .project-card:nth-child(even) {
-        grid-template-columns: 1.5fr 1fr;
-      }
-      
-      .project-card:nth-child(even) .project-info {
-        order: 2;
-      }
-      
-      .project-card:nth-child(even) .project-image {
-        order: 1;
-      }
-      
-      .project-card:hover {
-        transform: translateY(-5px);
-        box-shadow: var(--shadow-xl);
-      }
-      
-      .project-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        color: var(--text-primary);
-      }
-      
-      .project-description {
-        color: var(--text-secondary);
-        margin-bottom: 1.5rem;
-        line-height: 1.6;
-      }
-      
-      .project-tech {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-bottom: 1.5rem;
-      }
-      
-      .tech-tag {
-        background: var(--gradient-primary);
-        color: white;
-        padding: 0.3rem 0.8rem;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 500;
-      }
-      
-      .project-links {
-        display: flex;
-        gap: 1rem;
-      }
-      
-      .project-image {
-        position: relative;
-        overflow: hidden;
-        border-radius: 15px;
-      }
-      
-      .project-image img {
-        width: 100%;
-        height: 250px;
-        object-fit: cover;
-        transition: transform 0.3s ease;
-      }
-      
-      .project-image:hover img {
-        transform: scale(1.1);
-      }
-      
-      /* Contact */
-      .contact-content {
-        text-align: center;
-        max-width: 600px;
-        margin: 0 auto;
-      }
-      
-      .contact-text {
-        font-size: 1.2rem;
-        color: var(--text-secondary);
-        margin-bottom: 2rem;
-      }
-      
-      .contact-methods {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
-        margin: 3rem 0;
-      }
-      
-      .contact-method {
-        background: var(--surface);
-        padding: 2rem;
-        border-radius: 20px;
-        box-shadow: var(--shadow-lg);
-        border: 1px solid var(--border);
-        transition: all 0.3s ease;
-        text-decoration: none;
-        color: inherit;
-      }
-      
-      .contact-method:hover {
-        transform: translateY(-5px);
-        background: var(--primary);
-        color: white;
-      }
-      
-      .contact-method i {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-        display: block;
-      }
-      
-      /* Footer */
-      .footer {
-        background: var(--bg-dark);
-        color: white;
-        text-align: center;
-        padding: 3rem 0;
-      }
-      
-      .social-links {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin-bottom: 2rem;
-      }
-      
-      .social-links a {
-        width: 50px;
-        height: 50px;
-        background: var(--gradient-primary);
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        transition: all 0.3s ease;
-      }
-      
-      .social-links a:hover {
-        transform: translateY(-3px) scale(1.1);
-      }
-      
-      /* Responsive */
-      @media (max-width: 768px) {
-        .nav-links {
-          display: none;
-        }
-        
-        .about-wrapper {
-          grid-template-columns: 1fr;
-          text-align: center;
-        }
-        
-        .project-card,
-        .project-card:nth-child(even) {
-          grid-template-columns: 1fr;
-        }
-        
-        .project-card:nth-child(even) .project-info,
-        .project-card:nth-child(even) .project-image {
-          order: unset;
-        }
-        
-        .skills-grid {
-          grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-        }
-      }
-      
-      /* Loading Animation */
-      .load-hidden {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: all 0.8s ease;
-      }
-      
-      .load-hidden.reveal {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Fahim Francis — Junior Software Developer & ML Engineer based in Jerusalem."
+    />
+    <title>Fahim Francis</title>
+    <link rel="icon" type="image/png" href="./assets/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.scss" />
   </head>
-
-  <!-- Todo: read the following HTML Todos to create your stunning portfolio website -->
   <body>
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-      <div class="nav-container">
-        <div class="logo">FF</div>
-        <div class="mobile-menu-toggle" id="mobileMenuToggle">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <ul class="nav-links" id="navLinks">
-          <li><a href="#hero">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section id="hero" class="hero-section">
-      <div class="hero-content">
-        <div class="hero-greeting">Hello, I'm</div>
-        <h1 class="hero-title">
-          <span class="hero-name">Fahim Francis</span>
-        </h1>
-        <div class="hero-subtitle">The Unknown Developer</div>
-        <p class="hero-description">
-          Passionate Software Developer & ML Engineer crafting innovative solutions with modern technologies. 
-          CS graduate from HUJI with expertise in Python, Java, C++, and machine learning.
+    <!-- ── NAV ── -->
+    <header class="nav-header" id="nav-header">
+      <nav class="nav container">
+        <a href="#hero" class="nav__logo">FF<span class="nav__logo-dot">.</span></a>
+        <ul class="nav__links" id="nav-links">
+          <li><a href="#about" class="nav__link">About</a></li>
+          <li><a href="#skills" class="nav__link">Skills</a></li>
+          <li><a href="#experience" class="nav__link">Experience</a></li>
+          <li><a href="#projects" class="nav__link">Projects</a></li>
+          <li><a href="#contact" class="nav__link">Contact</a></li>
+        </ul>
+        <a href="./assets/cv-FF.pdf" class="btn btn--sm btn--outline" download>Resume</a>
+        <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Mobile nav overlay -->
+    <div class="mobile-nav" id="mobile-nav">
+      <a href="#about" class="mobile-nav__link">About</a>
+      <a href="#skills" class="mobile-nav__link">Skills</a>
+      <a href="#experience" class="mobile-nav__link">Experience</a>
+      <a href="#projects" class="mobile-nav__link">Projects</a>
+      <a href="#contact" class="mobile-nav__link">Contact</a>
+      <a href="./assets/cv-FF.pdf" class="btn btn--outline" download>Resume</a>
+    </div>
+
+    <!-- ── HERO ── -->
+    <section id="hero" class="hero">
+      <div class="container hero__inner">
+        <p class="hero__greeting reveal">Hi, my name is</p>
+        <h1 class="hero__name reveal">Fahim Francis.</h1>
+        <h2 class="hero__tagline reveal">I build software &amp; train models.</h2>
+        <p class="hero__desc reveal">
+          Junior Software Developer and ML Engineer. CS graduate from the
+          Hebrew University of Jerusalem with a passion for backend systems
+          and intelligent applications.
         </p>
-        <div class="hero-cta">
-          <a href="#projects" class="btn btn-primary">
-            <i class="fas fa-rocket"></i>
-            View My Work
-          </a>
-          <a href="#contact" class="btn btn-secondary">
-            <i class="fas fa-envelope"></i>
-            Get In Touch
-          </a>
+        <div class="hero__cta reveal">
+          <a href="#projects" class="btn btn--primary">See My Work</a>
+          <a href="#contact" class="btn btn--ghost">Get In Touch</a>
         </div>
       </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about">
+    <!-- ── ABOUT ── -->
+    <section id="about" class="section">
       <div class="container">
-        <h2 class="section-title load-hidden">About Me</h2>
-        <div class="about-wrapper load-hidden">
-          <div class="about-image">
+        <h2 class="section__title reveal">
+          <span class="section__num">01.</span> About Me
+        </h2>
+        <div class="about__grid">
+          <div class="about__text reveal">
+            <p>
+              I'm Fahim, a software developer with a strong foundation in
+              computer science from
+              <strong>Hebrew University of Jerusalem (HUJI)</strong>. I'm
+              passionate about building robust backend systems and applying
+              machine learning to solve real-world problems.
+            </p>
+            <p>
+              During my internship at <strong>Auura Inc</strong>, I worked on
+              backend features and AI-powered components including text
+              embeddings and semantic matching — which deepened my interest in
+              scalable systems and data-driven solutions.
+            </p>
+            <p>
+              Outside of work, you'll find me following football, listening to
+              music, or writing poetry. Here are a few technologies I've been
+              working with recently:
+            </p>
+            <ul class="about__techs">
+              <li>Python</li>
+              <li>Java</li>
+              <li>C++</li>
+              <li>SQL</li>
+              <li>Machine Learning</li>
+              <li>Backend Development</li>
+            </ul>
+            <a href="./assets/cv-FF.pdf" class="btn btn--outline" download>
+              Download Resume
+            </a>
+          </div>
+          <div class="about__img-wrap reveal">
             <img
-              src="assets/PHOTO-2025-03-07-11-10-51.png"
-              alt="Fahim Francis Profile"
+              src="./assets/profile.jpg"
+              alt="Fahim Francis"
+              class="about__img"
             />
           </div>
-          <div class="about-text">
-            <p>
-              Hi! I'm a Computer Science graduate from The Hebrew University of Jerusalem, 
-              passionate about creating software that makes a difference. I have a strong 
-              foundation in multiple programming languages and love tackling complex challenges 
-              with elegant solutions.
-            </p>
-            <p>
-              During my Software Engineer internship at Auura Inc, I worked on backend features 
-              and AI-driven components including text embeddings and semantic matching. I'm always 
-              eager to learn new technologies and collaborate with talented teams.
-            </p>
-            <p>
-              When I'm not coding, you'll find me following football, listening to music, 
-              or writing poetry. I believe in maintaining a curious and collaborative approach 
-              to both life and work.
-            </p>
-            
-            <div class="skills-grid">
-              <div class="skill-item">
-                <i class="fab fa-python"></i>
-                <span>Python</span>
-              </div>
-              <div class="skill-item">
-                <i class="fab fa-java"></i>
-                <span>Java</span>
-              </div>
-              <div class="skill-item">
-                <i class="fas fa-code"></i>
-                <span>C++</span>
-              </div>
-              <div class="skill-item">
-                <i class="fas fa-database"></i>
-                <span>SQL</span>
-              </div>
-              <div class="skill-item">
-                <i class="fas fa-brain"></i>
-                <span>Machine Learning</span>
-              </div>
-              <div class="skill-item">
-                <i class="fas fa-server"></i>
-                <span>Backend</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SKILLS ── -->
+    <section id="skills" class="section section--alt">
+      <div class="container">
+        <h2 class="section__title reveal">
+          <span class="section__num">02.</span> Skills
+        </h2>
+        <div class="skills__grid reveal">
+          <div class="skill-card">
+            <h3 class="skill-card__title">Languages</h3>
+            <ul>
+              <li>Python</li>
+              <li>Java</li>
+              <li>C++</li>
+              <li>SQL</li>
+              <li>JavaScript</li>
+              <li>Bash</li>
+            </ul>
+          </div>
+          <div class="skill-card">
+            <h3 class="skill-card__title">ML &amp; Data</h3>
+            <ul>
+              <li>scikit-learn</li>
+              <li>NumPy / Pandas</li>
+              <li>Matplotlib</li>
+              <li>Feature Engineering</li>
+              <li>Model Evaluation</li>
+              <li>Text Embeddings</li>
+            </ul>
+          </div>
+          <div class="skill-card">
+            <h3 class="skill-card__title">Backend &amp; Tools</h3>
+            <ul>
+              <li>REST APIs</li>
+              <li>Git &amp; GitHub</li>
+              <li>Linux / Terminal</li>
+              <li>PostgreSQL</li>
+              <li>OOP Design</li>
+              <li>Data Structures</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── EXPERIENCE ── -->
+    <section id="experience" class="section">
+      <div class="container">
+        <h2 class="section__title reveal">
+          <span class="section__num">03.</span> Experience
+        </h2>
+        <div class="timeline">
+          <div class="timeline__item reveal">
+            <div class="timeline__content">
+              <span class="timeline__date">2024</span>
+              <h3 class="timeline__role">Software Engineer Intern</h3>
+              <p class="timeline__company">Auura Inc</p>
+              <p class="timeline__desc">
+                Worked on backend development and AI-powered features including
+                text embeddings and semantic matching. Contributed to building
+                scalable application components in a fast-paced startup
+                environment.
+              </p>
+              <div class="timeline__tags">
+                <span>Python</span><span>Backend</span><span>NLP</span><span>AI</span>
               </div>
             </div>
-            
-            <div style="margin-top: 2rem;">
-              <a href="assets/FahimFRCV.pdf" target="_blank" class="btn btn-primary">
-                <i class="fas fa-download"></i>
-                Download Resume
+          </div>
+          <div class="timeline__item reveal">
+            <div class="timeline__content">
+              <span class="timeline__date">2020 – 2024</span>
+              <h3 class="timeline__role">BSc Computer Science</h3>
+              <p class="timeline__company">
+                Hebrew University of Jerusalem (HUJI)
+              </p>
+              <p class="timeline__desc">
+                Studied core CS fundamentals including algorithms, data
+                structures, operating systems, machine learning, and software
+                engineering. Built multiple projects spanning game development,
+                data science, and bioinformatics.
+              </p>
+              <div class="timeline__tags">
+                <span>Algorithms</span><span>ML</span><span>OOP</span><span>OS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PROJECTS ── -->
+    <section id="projects" class="section section--alt">
+      <div class="container">
+        <h2 class="section__title reveal">
+          <span class="section__num">04.</span> Projects
+        </h2>
+        <div class="projects__grid">
+
+          <article class="project-card reveal">
+            <div class="project-card__header">
+              <svg class="project-card__folder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+              <a href="https://github.com/FAfrancis99/CBIO-Hackathon" target="_blank" rel="noopener noreferrer" class="project-card__github" aria-label="GitHub repository">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
               </a>
             </div>
-          </div>
+            <h3 class="project-card__title">Antibiotic Resistance Prediction</h3>
+            <p class="project-card__desc">
+              ML pipeline for predicting antibiotic resistance from raw genomic
+              sequences using k-mer analysis on MEGARes data. Focused on
+              Beta-lactamase and Aminoglycoside resistance prediction with
+              advanced feature engineering and SMOTE for class imbalance.
+            </p>
+            <ul class="project-card__tags">
+              <li>Python</li><li>scikit-learn</li><li>Bioinformatics</li><li>SMOTE</li>
+            </ul>
+          </article>
+
+          <article class="project-card reveal">
+            <div class="project-card__header">
+              <svg class="project-card__folder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+              <a href="https://github.com/FAfrancis99/fifa-worldcup" target="_blank" rel="noopener noreferrer" class="project-card__github" aria-label="GitHub repository">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+            </div>
+            <h3 class="project-card__title">FIFA World Cup Predictor</h3>
+            <p class="project-card__desc">
+              Data science project predicting World Cup match outcomes using
+              historical data and team statistics. Applied classification
+              algorithms with statistical analysis and addressed class imbalance
+              challenges using ensemble methods.
+            </p>
+            <ul class="project-card__tags">
+              <li>Python</li><li>Pandas</li><li>scikit-learn</li><li>Data Science</li>
+            </ul>
+          </article>
+
+          <article class="project-card reveal">
+            <div class="project-card__header">
+              <svg class="project-card__folder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+              <a href="https://github.com/FAfrancis99/pepsi" target="_blank" rel="noopener noreferrer" class="project-card__github" aria-label="GitHub repository">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+            </div>
+            <h3 class="project-card__title">Pepse Game Engine</h3>
+            <p class="project-card__desc">
+              A 2D side-scrolling game engine built in Java from scratch.
+              Features procedural terrain generation, physics simulation,
+              dynamic day/night cycles, lighting systems, and an energy
+              management system — all built with clean OOP design patterns.
+            </p>
+            <ul class="project-card__tags">
+              <li>Java</li><li>OOP</li><li>Game Dev</li><li>Physics</li>
+            </ul>
+          </article>
+
         </div>
       </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects">
-      <div class="container">
-        <h2 class="section-title load-hidden">Featured Projects</h2>
-        <div class="projects-grid">
-          
-          <!-- Project 1 -->
-          <div class="project-card load-hidden">
-            <div class="project-info">
-              <h3 class="project-title">🧬 Antibiotic Resistance Prediction</h3>
-              <p class="project-description">
-                Developed a sophisticated ML model to predict antibiotic resistance from raw genomic sequences 
-                using k-mer analysis on MEGARes data. Focused on Beta-lactamase and Aminoglycoside resistance 
-                prediction with advanced data preprocessing and feature extraction techniques.
-              </p>
-              <div class="project-tech">
-                <span class="tech-tag">Python</span>
-                <span class="tech-tag">Machine Learning</span>
-                <span class="tech-tag">Bioinformatics</span>
-                <span class="tech-tag">SMOTE</span>
-                <span class="tech-tag">Feature Engineering</span>
-              </div>
-              <div class="project-links">
-                <a href="https://github.com/FAfrancis99/CBIO-Hackathon" target="_blank" class="btn btn-primary">
-                  <i class="fab fa-github"></i>
-                  View Code
-                </a>
-              </div>
-            </div>
-            <div class="project-image">
-              <img src="assets/fifi.webp" alt="Antibiotic Resistance Project" />
-            </div>
-          </div>
-
-          <!-- Project 2 -->
-          <div class="project-card load-hidden">
-            <div class="project-info">
-              <h3 class="project-title">⚽ FIFA World Cup Predictor</h3>
-              <p class="project-description">
-                Leveraged machine learning to predict FIFA World Cup match outcomes based on comprehensive 
-                historical data and team statistics. Implemented classification algorithms with advanced 
-                feature engineering and addressed class imbalance challenges.
-              </p>
-              <div class="project-tech">
-                <span class="tech-tag">Python</span>
-                <span class="tech-tag">Data Science</span>
-                <span class="tech-tag">Pandas</span>
-                <span class="tech-tag">Scikit-learn</span>
-                <span class="tech-tag">Statistical Analysis</span>
-              </div>
-              <div class="project-links">
-                <a href="https://github.com/FAfrancis99/fifa-worldcup/blob/main/data_fifa/code.ipynb" target="_blank" class="btn btn-primary">
-                  <i class="fab fa-github"></i>
-                  View Code
-                </a>
-              </div>
-            </div>
-            <div class="project-image">
-              <img src="assets/download.png" alt="FIFA Prediction Project" />
-            </div>
-          </div>
-
-          <!-- Project 3 -->
-          <div class="project-card load-hidden">
-            <div class="project-info">
-              <h3 class="project-title">🎮 Pepse Game Engine</h3>
-              <p class="project-description">
-                Built a comprehensive 2D game engine with procedural world generation, dynamic day-night cycles, 
-                and interactive environments. Features include advanced lighting systems, physics-based interactions, 
-                and an energy management system for player avatars.
-              </p>
-              <div class="project-tech">
-                <span class="tech-tag">Java</span>
-                <span class="tech-tag">Game Development</span>
-                <span class="tech-tag">OOP</span>
-                <span class="tech-tag">Graphics</span>
-                <span class="tech-tag">Physics Engine</span>
-              </div>
-              <div class="project-links">
-                <a href="https://github.com/FAfrancis99/pepsi" target="_blank" class="btn btn-primary">
-                  <i class="fab fa-github"></i>
-                  View Code
-                </a>
-              </div>
-            </div>
-            <div class="project-image">
-              <img src="assets/pepsi.png" alt="Pepse Game Engine" />
-            </div>
-          </div>
+    <!-- ── CONTACT ── -->
+    <section id="contact" class="section">
+      <div class="container contact">
+        <h2 class="section__title section__title--center reveal">
+          <span class="section__num">05.</span> Get In Touch
+        </h2>
+        <p class="contact__sub reveal">
+          I'm currently open to new opportunities. Whether you have a question,
+          a project idea, or just want to say hi — my inbox is always open.
+        </p>
+        <a href="mailto:faheemfrancis99@gmail.com" class="btn btn--primary reveal">
+          Say Hello
+        </a>
+        <div class="contact__links reveal">
+          <a href="mailto:faheemfrancis99@gmail.com" class="contact__link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            faheemfrancis99@gmail.com
+          </a>
+          <a href="https://linkedin.com/in/fahim-francis-1183b4294" target="_blank" rel="noopener noreferrer" class="contact__link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://github.com/FAfrancis99" target="_blank" rel="noopener noreferrer" class="contact__link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact">
-      <div class="container">
-        <h2 class="section-title load-hidden">Let's Connect</h2>
-        <div class="contact-content load-hidden">
-          <p class="contact-text">
-            🚀 I'm actively seeking new opportunities in software development and would love to discuss how we can create something amazing together!
-          </p>
-          
-          <div class="contact-methods">
-            <a href="mailto:faheemfrancis99@gmail.com" class="contact-method">
-              <i class="fas fa-envelope"></i>
-              <h3>Email</h3>
-              <p>faheemfrancis99@gmail.com</p>
-            </a>
-            <a href="https://www.linkedin.com/in/fahim-francis-1183b4294/" target="_blank" class="contact-method">
-              <i class="fab fa-linkedin"></i>
-              <h3>LinkedIn</h3>
-              <p>Connect with me</p>
-            </a>
-            <a href="https://github.com/FAfrancis99" target="_blank" class="contact-method">
-              <i class="fab fa-github"></i>
-              <h3>GitHub</h3>
-              <p>Check out my code</p>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
+    <!-- ── FOOTER ── -->
     <footer class="footer">
-      <div class="container">
-        <div class="social-links">
-          <a href="mailto:faheemfrancis99@gmail.com">
-            <i class="fas fa-envelope"></i>
-          </a>
-          <a href="https://www.linkedin.com/in/fahim-francis-1183b4294/" target="_blank">
-            <i class="fab fa-linkedin"></i>
-          </a>
-          <a href="https://github.com/FAfrancis99" target="_blank">
-            <i class="fab fa-github"></i>
-          </a>
-        </div>
-        <p>© 2025 Fahim Francis. Built with passion and lots of coffee ☕</p>
-      </div>
+      <p>Designed &amp; Built by <span class="footer__name">Fahim Francis</span></p>
     </footer>
 
-    <script defer type="module" src="index.js"></script>
-    <script>
-      // Navbar scroll effect
-      window.addEventListener('scroll', () => {
-        const navbar = document.getElementById('navbar');
-        if (window.scrollY > 50) {
-          navbar.classList.add('scrolled');
-        } else {
-          navbar.classList.remove('scrolled');
-        }
-      });
-
-      // Mobile menu functionality
-      const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-      const navLinks = document.getElementById('navLinks');
-
-      mobileMenuToggle.addEventListener('click', () => {
-        mobileMenuToggle.classList.toggle('active');
-        navLinks.classList.toggle('active');
-      });
-
-      // Close mobile menu when clicking on a link
-      document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-          mobileMenuToggle.classList.remove('active');
-          navLinks.classList.remove('active');
-        });
-      });
-
-      // Close mobile menu when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!mobileMenuToggle.contains(e.target) && !navLinks.contains(e.target)) {
-          mobileMenuToggle.classList.remove('active');
-          navLinks.classList.remove('active');
-        }
-      });
-
-      // Reveal animation on scroll
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      };
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('reveal');
-          }
-        });
-      }, observerOptions);
-
-      // Observe all elements with load-hidden class
-      document.querySelectorAll('.load-hidden').forEach(el => {
-        observer.observe(el);
-      });
-
-      // Smooth scrolling for navigation links
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute('href'));
-          if (target) {
-            target.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
-            });
-          }
-        });
-      });
-
-      // Add parallax effect to hero (disabled on mobile for performance)
-      if (window.innerWidth > 768) {
-        window.addEventListener('scroll', () => {
-          const scrolled = window.pageYOffset;
-          const heroContent = document.querySelector('.hero-content');
-          if (heroContent) {
-            heroContent.style.transform = `translateY(${scrolled * 0.5}px)`;
-          }
-        });
-      }
-    </script>
+    <script type="module" src="./index.js"></script>
   </body>
 </html>
