@@ -439,22 +439,74 @@
     .back-to-top:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(88,166,255,.2); }
 
     /* ── RESPONSIVE ── */
+
+    /* Tablet landscape / small desktop */
     @media (max-width: 900px) {
       .wib__grid { grid-template-columns: 1fr 1fr; }
       .projects__grid { grid-template-columns: repeat(2,1fr); }
+      .skills__grid { grid-template-columns: repeat(2,1fr); }
     }
+
+    /* Tablet portrait */
     @media (max-width: 768px) {
+      .container { padding: 0 1.5rem; }
       .nav__links { display: none; }
       .nav__hamburger { display: flex; }
+      /* Hide resume btn in nav — accessible via About section */
+      .nav > .btn { display: none; }
+      .section { padding: 5rem 0; }
+      .section__title { font-size: 1.3rem; margin-bottom: 2rem; }
+      .section__title::after { width: 80px; }
+      .hero__inner { padding: 3rem 0; }
+      .hero__desc { max-width: 100%; }
+      .hero__orb--1 { width: 300px; height: 300px; left: 40%; }
+      .hero__orb--2 { width: 200px; height: 200px; }
       .about__grid { grid-template-columns: 1fr; }
-      .about__img-wrap { width: 180px; margin: 0 auto; }
+      .about__img-wrap { width: 180px; margin: 0 auto; grid-row: 1; }
       .about__img-wrap::before { display: none; }
       .skills__grid { grid-template-columns: 1fr; }
-      .edu-card { flex-direction: column; gap: 1rem; }
+      .exp-card { padding: 1.5rem; }
+      .exp-card__bullets li { font-size: .84rem; }
+      .exp-card__tags span { font-size: .68rem; }
+      .edu-card { flex-direction: column; gap: 1rem; padding: 1.5rem; text-align: center; }
+      .contact__links { flex-direction: column; align-items: center; gap: 1.25rem; }
     }
+
+    /* Phone */
     @media (max-width: 580px) {
+      .container { padding: 0 1.25rem; }
+      .section { padding: 4rem 0; }
+      .section__title { font-size: 1.2rem; gap: .5rem; }
+      .section__title::after { display: none; }
+      .hero__inner { padding: 2.5rem 0; }
+      .hero__name { letter-spacing: -.02em; }
+      .hero__cta { flex-direction: column; gap: .75rem; }
+      .hero__cta .btn { width: 100%; justify-content: center; }
+      .hero__orb--1 { width: 220px; height: 220px; top: 2%; left: 30%; }
+      .hero__orb--2 { width: 160px; height: 160px; }
+      .hero__orb--3 { width: 120px; height: 120px; }
       .projects__grid { grid-template-columns: 1fr; }
       .wib__grid { grid-template-columns: 1fr; }
+      .project-card { padding: 1.25rem; }
+      .project-card__metrics { gap: .5rem; }
+      .wib-card { padding: 1.25rem; }
+      .skill-card { padding: 1.25rem; }
+      .exp-card { padding: 1.25rem; }
+      .exp-card__bullets { padding-left: 1rem; }
+      .edu-card { padding: 1.25rem; }
+      .about__img-wrap { width: 150px; }
+      .btn { font-size: .875rem; }
+      .back-to-top { bottom: 1.25rem; right: 1.25rem; }
+      .footer { padding: 1.5rem 1.25rem; }
+    }
+
+    /* Very small (iPhone SE, 375px) */
+    @media (max-width: 390px) {
+      .hero__available { font-size: .72rem; }
+      .hero__greeting { font-size: .88rem; }
+      .section__num { font-size: .8rem; }
+      .mobile-nav__link { font-size: 1rem; }
+      .nav__logo { font-size: 1.05rem; padding: .25rem .5rem; }
     }
   </style>
 </head>
@@ -874,51 +926,54 @@
     );
     document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
 
-    // ── 3D TILT — all cards ──
-    function addTilt(selector, deg, lift) {
-      document.querySelectorAll(selector).forEach(card => {
-        card.addEventListener('mousemove', e => {
-          const r = card.getBoundingClientRect();
-          const x = (e.clientX - r.left) / r.width  - .5;
-          const y = (e.clientY - r.top)  / r.height - .5;
-          card.style.transform = `perspective(700px) rotateY(${x*deg}deg) rotateX(${-y*deg}deg) translateY(${-lift}px) scale(1.01)`;
-          card.classList.add('tilted');
+    // ── 3D TILT — desktop only (no touch) ──
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (!isTouch) {
+      function addTilt(selector, deg, lift) {
+        document.querySelectorAll(selector).forEach(card => {
+          card.addEventListener('mousemove', e => {
+            const r = card.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width  - .5;
+            const y = (e.clientY - r.top)  / r.height - .5;
+            card.style.transform = `perspective(700px) rotateY(${x*deg}deg) rotateX(${-y*deg}deg) translateY(${-lift}px) scale(1.01)`;
+            card.classList.add('tilted');
+          });
+          card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+            card.classList.remove('tilted');
+          });
         });
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = '';
-          card.classList.remove('tilted');
+      }
+      addTilt('.project-card', 10, 7);
+      addTilt('.skill-card',   8,  5);
+      addTilt('.wib-card',     8,  5);
+      addTilt('.exp-card',     4,  3);
+      addTilt('.edu-card',     4,  3);
+
+      // ── HERO MOUSE PARALLAX — desktop only ──
+      const heroEl = document.querySelector('.hero');
+      const layers = [
+        { el: document.querySelector('.hero__available'), sx: .012, sy: .008 },
+        { el: document.querySelector('.hero__greeting'),  sx: .018, sy: .012 },
+        { el: document.querySelector('.hero__name'),      sx: .028, sy: .018 },
+        { el: document.querySelector('.hero__tagline'),   sx: .022, sy: .014 },
+        { el: document.querySelector('.hero__desc'),      sx: .014, sy: .009 },
+        { el: document.querySelector('.hero__cta'),       sx: .010, sy: .007 },
+      ];
+      let heroRect = heroEl.getBoundingClientRect();
+      window.addEventListener('resize', () => { heroRect = heroEl.getBoundingClientRect(); });
+      heroEl.addEventListener('mousemove', e => {
+        const cx = heroRect.left + heroRect.width  / 2;
+        const cy = heroRect.top  + heroRect.height / 2;
+        const dx = e.clientX - cx, dy = e.clientY - cy;
+        layers.forEach(({ el, sx, sy }) => {
+          if (el) el.style.transform = `translate(${dx*sx}px, ${dy*sy}px)`;
         });
+      });
+      heroEl.addEventListener('mouseleave', () => {
+        layers.forEach(({ el }) => { if (el) el.style.transform = ''; });
       });
     }
-    addTilt('.project-card', 10, 7);
-    addTilt('.skill-card',   8,  5);
-    addTilt('.wib-card',     8,  5);
-    addTilt('.exp-card',     4,  3);
-    addTilt('.edu-card',     4,  3);
-
-    // ── HERO MOUSE PARALLAX ──
-    const heroEl   = document.querySelector('.hero');
-    const layers   = [
-      { el: document.querySelector('.hero__available'), sx: .012, sy: .008 },
-      { el: document.querySelector('.hero__greeting'),  sx: .018, sy: .012 },
-      { el: document.querySelector('.hero__name'),      sx: .028, sy: .018 },
-      { el: document.querySelector('.hero__tagline'),   sx: .022, sy: .014 },
-      { el: document.querySelector('.hero__desc'),      sx: .014, sy: .009 },
-      { el: document.querySelector('.hero__cta'),       sx: .010, sy: .007 },
-    ];
-    let heroRect = heroEl.getBoundingClientRect();
-    window.addEventListener('resize', () => { heroRect = heroEl.getBoundingClientRect(); });
-    heroEl.addEventListener('mousemove', e => {
-      const cx = heroRect.left + heroRect.width  / 2;
-      const cy = heroRect.top  + heroRect.height / 2;
-      const dx = e.clientX - cx, dy = e.clientY - cy;
-      layers.forEach(({ el, sx, sy }) => {
-        if (el) el.style.transform = `translate(${dx*sx}px, ${dy*sy}px)`;
-      });
-    });
-    heroEl.addEventListener('mouseleave', () => {
-      layers.forEach(({ el }) => { if (el) el.style.transform = ''; });
-    });
 
     // ── ACTIVE NAV ──
     const sections = document.querySelectorAll('section[id]');
